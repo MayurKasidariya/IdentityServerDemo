@@ -10,18 +10,18 @@ It enables the following features in your applications:
 - Mature Open Source
 - Free and Commercial Support
 
-This solution have 3 projects based on ASP.NET CORE(.NET 5.0)
+This solution has 3 projects based on ASP.NET CORE(.NET 5.0)
 1. Identity Server Configuration
 2. WebApi Project Protected with Identity Server
 3. Web Application Authentication By Open id connect
 
 for user authentication.
 
-* Authorization Code flow - This is the recommended approach to OpenId Connect authentication. It will redirect the user to a Identity Server login page before returning to your app. See `Startup.cs` for configuring this approach.
-* Open Id connect authentication is authenticate based on identity server, In identity server we have defined clients with client Id and client secret password see IdentityServerDemo - Config.cs
+* Authorization Code flow - This is the recommended approach to OpenId Connect authentication. It will redirect the user to an Identity Server login page before returning to your app. See `Startup.cs` for configuring this approach.
+* Open Id connect authentication is authenticate based on identity server, In identity server, we have defined clients with client Id and client secret password see IdsConfig - Config.cs
 
 This app also includes an example of obtaining an OAuth2 `access_token` for use in accessing the APIs The `Weather` route in the `Controllers/HomeController.cs` 
-demonstrates how to use that token to fetch a list of wheather data that are accessible by a user and then provides a way to launch the apps in `Views/Home/Weather.cshtml`.
+demonstrates how to use that token to fetch a list of weather data that are accessible by a user and then provides a way to launch the apps in `Views/Home/Weather.cshtml`.
 
 # How to Setup Identity Server
 ### 1. IdsConfig Project
@@ -38,7 +38,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
         ```csharp
         services.AddControllersWithViews();
         ```
-    - add Configuration in Configure method to use file.
+    - add Configuration in Configure method to use the file.
         ```csharp
         app.UseStaticFiles();
         ```
@@ -72,13 +72,13 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
         ...
         ```
     notice the addition of the new call to AddAspNetIdentity<IdentityUser>. AddAspNetIdentity adds the integration layer to allow IdentityServer to access the user data for the ASP.NET Core Identity user database. This is needed when IdentityServer must add claims for the users into tokens.
-5. Now add Migration for DbContext that we have config in above step, before that plese check the Connection string in `appsettings.json` and change as per you Connection string, 
-    - now run command as below in Package Manage Console
+5. Now add Migration for DbContext that we have config in the above step, before that please check the Connection string in `appsettings.json` and change as per your Connection string, 
+    - now run the command as below in Package Manage Console
         ```
             PM> add-migration InitialIdentityServerMigartion -c PersistedGrantDbContext // For Operation store of Identity Server
             PM> add-migration InitialIdentityServerMigartion -c ConfigurationDbContext // For Configuration store of Identity server
         ```
-    - now run update-database command so all tables are create in database related to Identity server
+    - now run the update-database command so all tables are created in the database related to the Identity server
         ```
             PM> update-database -Context PersistedGrantDbContext
             PM> update-database -Context ConfigurationDbContext
@@ -94,7 +94,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
                 options.UseSqlServer(connectionString,
                     sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
         ```
-    - add new migration using command for `IdentityDbContext` and update the database which create Asp user related tables
+    - add new migration using the command for `IdentityDbContext` and update the database which creates Asp user related tables
         ```
             PM> add-migration InitialIdentityServerMigartion -c IdsDbContext
             PM> update-database -Context IdsDbContext
@@ -107,7 +107,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
         
     Note that AddIdentity<ApplicationUser, IdentityRole> must be invoked before AddIdentityServer.
 
-8. Identity server requires data to do operation so in code there are some hard-coded in-memory clients and resource definitions in `Config.cs` file those data seeded into database using InitializeDatabase() method which is called in `Configure` method in `Startup.cs` file
+8. Identity server requires data to do the operation so in code there are some hard-coded in-memory clients and resource definitions in `Config.cs` file those data seeded into database using InitializeDatabase() method which is called in `Configure` method in `Startup.cs` file
     ```csharp
         private void InitializeDatabase(IApplicationBuilder app)
         {
@@ -229,8 +229,8 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
 # Setup WebApi with Identity Server
 ### 2. IdsWebApi Project
 
-1. Add New project of ASP.NET CORE(.NET 5.0) using any name in code name is `IdsWebApi`, it's include default controller called `WeatherForecastController`.
-2. to configure api using Identity server we need to install nuget package `IdentityServer4.AccessTokenValidation` which provide library to configure api using IdentityServerAuthentication. After installation of nuget package we need to add service in `ConfigureServices` (IdsWebApi/Startup.cs)
+1. Add New project of ASP.NET CORE(.NET 5.0) using any name in code name is `IdsWebApi`, it includes a default controller called `WeatherForecastController`.
+2. to configure API using Identity server we need to install NuGet package `IdentityServer4.AccessTokenValidation` which provide a library to configure API using IdentityServerAuthentication. After installation of the NuGet package we need to add a service in `ConfigureServices` (IdsWebApi/Startup.cs)
     ```csharp
         public void ConfigureServices(IServiceCollection services)
         {
@@ -243,7 +243,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
             services.AddControllers();
         }
     ```
-3. Still Api is not secure until we add Authentication in App and add [Authorize] role on the Api Controller please check this
+3. Still Api is not secure until we add Authentication in App and add [Authorize] role on the API Controller please check this
     - Add Authentication in App
         ```csharp
             app.UseAuthentication();
@@ -258,7 +258,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
                 //Your Apis
             }
         ```
-# Setup WebApp with access api with OpenId Connect using Identity server
+# Setup WebApp with access API with OpenId Connect using Identity server
 
 ### 3. IdsWebApp Project
 1. add new project of of ASP.NET CORE MVC(.NET 5.0) using any name in code name is `IdsWebApp`, it's include default controllers and Views
@@ -268,7 +268,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
                 .GetAsync("https://localhost:44332/weatherforecast")
                 .Result;
     ```
-    add one class in model to get converted result from API
+    add one class in the model to get a converted result from API
     ```csharp
     public class WeatherData
     {
@@ -278,10 +278,10 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
         public string Summary { get; set; }
     }
     ```
-    This API is secure with `Bearer-Authentication` so we need to provide Baarer token with api call so one service is configured in code call `TokenService`, if you don't want to add token seervice you can directly call `TokenService.cs` code in controller.
-    TokenService having class which having method for generate token and Interface which is use for inject in HomeController.cs, you can find both class and interface file in `Services` Directory of `IdsWebApp`.
-    Token Service class use IdentityServerSettings for generating token so we import IdentityServerSettings in project using service
-    for that class is created and IdentityServerSettings data is from `appsettings.json` file of project `IdsWebApp`.
+    This API is secure with `Bearer-Authentication` so we need to provide Bearer token with API call so one service is configured in code call `TokenService`, if you don't want to add token service you can directly call `TokenService.cs` code in the controller.
+    TokenService having a class that has a method for generating token and Interface which is used for injecting in HomeController.cs, you can find both class and interface file in `Services` Directory of `IdsWebApp`.
+    Token Service class use IdentityServerSettings for generating token so we import IdentityServerSettings in the project using service
+    for that class is created and IdentityServerSettings data is from the `appsettings.json` file of project `IdsWebApp`.
 
     ### appsettings.json
         ```json
@@ -348,7 +348,7 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
 
         }
     ```
-3. run the project and visit the page https://localhost:44324/Home/Weather where you get list of Weather data get using the API.
+3. run the project and visit the page https://localhost:44324/Home/Weather where you get a list of Weather data get using the API.
 4. Web API is secure but our web application isn't, so now we add nuget Packages as below To configure OpenIdConnect
     - IdentityModel
     - Microsoft.AspNetCore.Authentication.OpenIdConnect
@@ -373,28 +373,28 @@ demonstrates how to use that token to fetch a list of wheather data that are acc
                 options.SaveTokens = true;
             });
     ```
-    after adding this add authentication to application and add [Authorize] role on `weather` method of `HomeController.cs`.
-6. Build `IdsWebApp` and right click on solution select multiple project in startup project, and run the project now all 3 projects are run open https://localhost:44324/Home/Weather here you will redirect to Login page of identity server now login with user that you have imported added in hard-code or you can user as per this code
+    after adding this add authentication to the application and add [Authorize] role on the `weather` method of `HomeController.cs`.
+6. Build `IdsWebApp` and right-click on solution select multiple projects in startup project, and run the project now all 3 projects are run open https://localhost:44324/Home/Weather here you will redirect to the Login page of identity server now login with a user that you have imported added in hard-code or you can use as per this code
     UserName: Potenza
     Password: Potenza@123
 
-    after login you will redirect to listing page with data which is get from api.
+    after login, you will redirect to the listing page with data that is got from API.
 
 # How to setup project in your local
 
-### if you want run project without any default data changes 
+### if you want to run the project without any default data changes 
 
-- Before run the project, please look the Connection string in `appsettings.json` of IdsConfig Project and change the Server Name, Datatabse Name, User and Password as per you have
-- Now right click on Solution -> select properties -> In Common Properties - Startup Project -> select Multiple Startup Projects -> and set options start of all projects listed
+- Before running the project, please look at the Connection string in `appsettings.json` of IdsConfig Project and change the Server Name, Database Name, User and Password as you have
+- Now right-click on Solution -> select properties -> In Common Properties - Startup Project -> select Multiple Startup Projects -> and set options start of all projects listed
 
 
 ### if you want to do changes in data
-Before run the project
-- please look the Connection string in `appsettings.json` of IdsConfig Project and change the Server Name, Datatabse Name, User and Password as per you have
-- Now you have to check default client data that you can find in `Config.cs` file of IdsConfig Project
-- Same for the users that you can find in `Startup.cs` file of IdsConfig Project
+Before running the project
+- please look at the Connection string in `appsettings.json` of IdsConfig Project and change the Server Name, Database Name, User and Password as you have
+- Now you have to check default client data that you can find in the `Config.cs` file of IdsConfig Project
+- Same for the users that you can find in the `Startup.cs` file of IdsConfig Project
 - you can change both as per your choice
-    - Note: there was condition if you change the Client data you need to change the `appsettings.json` file of IdsWebApp Project, In this file you can see the client datat are exists those are user for API call and User Authorization, so if you change default client data you need to change same in [appsettings.json]
+    - Note: there was a condition if you change the Client data you need to change the `appsettings.json` file of IdsWebApp Project, In this file, you can see the client data exist those are used for API call and User Authorization, so if you change default client data you need to change same in [appsettings.json]
 - Default Data which will Seed in Your database from `Config.cs` file of IdsConfig Project
     -  ```csharp
         public class Config
@@ -466,6 +466,3 @@ Before run the project
             };
         }
         ```
-
-
-

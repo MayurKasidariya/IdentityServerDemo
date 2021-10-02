@@ -34,7 +34,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
     - Microsoft.EntityFrameworkCore.SqlServer //use to connect sql server with identity server
     - Microsoft.EntityFrameworkCore.Tools //use for data manupulation
 3. Add Quickstart UI of Indetity server which you can get from https://github.com/IdentityServer/IdentityServer4.Quickstart.UI, To configure Quickstart UI in project 
-    ### Statup.cs
+    ### Startup.cs
     - add service in `ConfigureServices` 
         ```csharp
         services.AddControllersWithViews();
@@ -53,7 +53,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
         ```
 
 4. After installing all the nuget packages now we go for `Startup.cs` file and configure identity server using `services.AddIdentityServer()` in ConfigureService(), also we configure DbContext for ConfigurationStore and OperationalStore.
-    ### Statup.cs
+    ### Startup.cs
     ```csharp
     var connectionString = Configuration.GetConnectionString("DefaultConnection");
     var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -89,7 +89,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
 7. Add new custom Dbcontext which inherites `IdentityDbContext` which is use to manage login of application using database
     - In code you can get the file `IdsDbContext.cs` in `Data` directory
     - after adding file configure DbContext in services
-        ### Statup.cs
+        ### Startup.cs
         ```csharp
             services.AddDbContext<IdsDbContext>(options =>
                 options.UseSqlServer(connectionString,
@@ -101,7 +101,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
             PM> update-database -Context IdsDbContext
         ```
     - configure custome DbContext with Identity methods which use two prameters `IdentityUser, IdentityRole` to manage use login
-        ### Statup.cs
+        ### Startup.cs
         ```csharp
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdsDbContext>();
@@ -110,7 +110,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
     Note that AddIdentity<ApplicationUser, IdentityRole> must be invoked before AddIdentityServer.
 
 8. Identity server requires data to do the operation so in code there are some hard-coded in-memory clients and resource definitions in `Config.cs` file those data seeded into database using InitializeDatabase() method which is called in `Configure` method in `Startup.cs` file
-    ### Statup.cs
+    ### Startup.cs
     ```csharp
         private void InitializeDatabase(IApplicationBuilder app)
         {

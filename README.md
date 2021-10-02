@@ -53,23 +53,21 @@ demonstrates how to use that token to fetch a list of weather data that are acce
 
 4. After installing all the nuget packages now we go for `Startup.cs` file and configure identity server using `services.AddIdentityServer()` in ConfigureService(), also we configure DbContext for ConfigurationStore and OperationalStore.
     -  ```csharp
-        ...
         var connectionString = Configuration.GetConnectionString("DefaultConnection");
         var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
         services.AddIdentityServer()
-                .AddAspNetIdentity<IdentityUser>() // this adds asp user identity login
-                // this adds the operational data to DB (codes, tokens, consents)
-                .AddConfigurationStore(con =>
-                {
-                    con.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                // this adds the operational data to DB (codes, tokens, consents)
-                .AddOperationalStore(os =>
-                {
-                    os.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));                    
-                })
-                .AddDeveloperSigningCredential();
-        ...
+            .AddAspNetIdentity<IdentityUser>() // this adds asp user identity login
+            // this adds the operational data to DB (codes, tokens, consents)
+            .AddConfigurationStore(con =>
+            {
+                con.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+            })
+            // this adds the operational data to DB (codes, tokens, consents)
+            .AddOperationalStore(os =>
+            {
+                os.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));                    
+            })
+            .AddDeveloperSigningCredential();
         ```
     notice the addition of the new call to AddAspNetIdentity<IdentityUser>. AddAspNetIdentity adds the integration layer to allow IdentityServer to access the user data for the ASP.NET Core Identity user database. This is needed when IdentityServer must add claims for the users into tokens.
 5. Now add Migration for DbContext that we have config in the above step, before that please check the Connection string in `appsettings.json` and change as per your Connection string, 

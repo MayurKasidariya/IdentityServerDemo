@@ -666,11 +666,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\HardikD\\IdentityServerDemo\\IdsWebApi\\IdsWebApi.csproj",
+      "projectUniqueName": "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsWebApi\\IdsWebApi.csproj",
       "projectName": "IdsWebApi",
-      "projectPath": "F:\\HardikD\\IdentityServerDemo\\IdsWebApi\\IdsWebApi.csproj",
+      "projectPath": "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsWebApi\\IdsWebApi.csproj",
       "packagesPath": "C:\\Users\\Potenza\\.nuget\\packages\\",
-      "outputPath": "F:\\HardikD\\IdentityServerDemo\\IdsWebApi\\obj\\",
+      "outputPath": "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsWebApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Potenza\\AppData\\Roaming\\NuGet\\NuGet.Config",

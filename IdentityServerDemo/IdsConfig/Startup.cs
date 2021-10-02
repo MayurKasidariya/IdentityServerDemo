@@ -48,12 +48,13 @@ namespace IdsConfig
                 .AddEntityFrameworkStores<IdsDbContext>();
 
             services.AddIdentityServer()
-                .AddAspNetIdentity<IdentityUser>()
+                .AddAspNetIdentity<IdentityUser>() // this adds asp user identity login
+                // this adds the operational data to DB (codes, tokens, consents)
                 .AddConfigurationStore(con =>
                 {
                     con.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
-                // this adds the operational data from DB (codes, tokens, consents)
+                // this adds the operational data to DB (codes, tokens, consents)
                 .AddOperationalStore(os =>
                 {
                     os.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));                    

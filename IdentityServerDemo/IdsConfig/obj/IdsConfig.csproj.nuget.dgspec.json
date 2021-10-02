@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\HardikD\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj": {}
+    "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj": {}
   },
   "projects": {
-    "F:\\HardikD\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj": {
+    "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\HardikD\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj",
+        "projectUniqueName": "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj",
         "projectName": "IdsConfig",
-        "projectPath": "F:\\HardikD\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj",
+        "projectPath": "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsConfig\\IdsConfig.csproj",
         "packagesPath": "C:\\Users\\Potenza\\.nuget\\packages\\",
-        "outputPath": "F:\\HardikD\\IdentityServerDemo\\IdsConfig\\obj\\",
+        "outputPath": "F:\\HardikD\\GIT\\IdentityServerDemo\\IdentityServerDemo\\IdsConfig\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Potenza\\AppData\\Roaming\\NuGet\\NuGet.Config",

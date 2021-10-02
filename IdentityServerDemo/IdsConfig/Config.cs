@@ -13,60 +13,6 @@ namespace IdsConfig
 {
     public class Config
     {
-        public static List<TestUser> Users
-        {
-            get
-            {
-                var address = new
-                {
-                    street_address = "Hacker Street",
-                    locality = "Indian",
-                    postal_code = 395002,
-                    country = "India"
-                };
-
-                return new List<TestUser>
-                {
-                    new TestUser
-                    {
-                        SubjectId = "1",
-                        Username = "Potenza",
-                        Password = "Potenza@123",
-                        Claims =
-                        {
-                            new Claim(JwtClaimTypes.Name, "Potenza User"),
-                            new Claim(JwtClaimTypes.GivenName, "Potenza"),
-                            new Claim(JwtClaimTypes.FamilyName, "Potenza"),
-                            new Claim(JwtClaimTypes.Email, "info@potenzaglobalsolutions.com"),
-                            new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                            new Claim(JwtClaimTypes.Role, "admin"),
-                            new Claim(JwtClaimTypes.WebSite, "https://potenzagloblsolutions.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address),
-                            IdentityServerConstants.ClaimValueTypes.Json)
-                        }
-                    },
-                    new TestUser
-                    {
-                        SubjectId = "2",
-                        Username = "Test",
-                        Password = "123456",
-                        Claims =
-                        {
-                            new Claim(JwtClaimTypes.Name, "Test User"),
-                            new Claim(JwtClaimTypes.GivenName, "User"),
-                            new Claim(JwtClaimTypes.FamilyName, "Test"),
-                            new Claim(JwtClaimTypes.Email, "testuser@email.com"),
-                            new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                            new Claim(JwtClaimTypes.Role, "user"),
-                            new Claim(JwtClaimTypes.WebSite, "http://potenzagloblsolutions.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address),
-                            IdentityServerConstants.ClaimValueTypes.Json)
-                        }
-                    }
-                };
-            }
-        }
-
         public static IEnumerable<IdentityResource> IdentityResources =>
         new[]
         {
@@ -99,7 +45,7 @@ namespace IdsConfig
         public static IEnumerable<Client> Clients =>
         new[]
         {
-            // m2m client credentials flow client
+            // machine to machine client
             new Client
             {
               ClientId = "super.client",
@@ -111,7 +57,7 @@ namespace IdsConfig
               AllowedScopes = { "IdsWebApi.read", "IdsWebApi.write" }
             },
 
-            // interactive client using code flow + pkce
+            // interactive ASP.NET Core MVC client
             new Client
             {
               ClientId = "interactive",
@@ -119,8 +65,10 @@ namespace IdsConfig
 
               AllowedGrantTypes = GrantTypes.Code,
 
+              // where to redirect to after login
               RedirectUris = {"https://localhost:44324/signin-oidc"},
-              FrontChannelLogoutUri = "https://localhost:44324/signout-oidc",
+              
+              // where to redirect to after logout
               PostLogoutRedirectUris = {"https://localhost:44324/signout-callback-oidc"},
 
               AllowOfflineAccess = true,

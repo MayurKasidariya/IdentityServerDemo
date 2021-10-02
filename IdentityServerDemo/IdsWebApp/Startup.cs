@@ -32,11 +32,11 @@ namespace IdsWebApp
             // Allow sign in via an OpenId Connect using identity server
             services.AddAuthentication(config =>
             {
-                config.DefaultScheme = "cookies";
-                config.DefaultChallengeScheme = "oidc" ;
+                config.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-                .AddCookie("cookies")
-                .AddOpenIdConnect("oidc",options =>
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme,options =>
                 {
                     options.Authority = "https://localhost:44318";
                     options.ClientId = Configuration["oidc:ClientName"];

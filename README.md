@@ -282,42 +282,42 @@ demonstrates how to use that token to fetch a list of weather data that are acce
     for that class is created and IdentityServerSettings data is from the `appsettings.json` file of project `IdsWebApp`.
 
     ### appsettings.json
-        ```json
+    ```json
         "IdentityServerSettings": {
             "ApiUrl": "https://localhost:44318/",
             "ClientName": "super.client",
             "ClientPassword": "SecretPassword",
             "UseHttps": true
         },
-        ```
+    ```
     ### Startup.cs
-        ```csharp
-        services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
-        ```
+    ```csharp
+    services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
+    ```
     ### TokenService.cs
-        ```csharp
-        public async Task<TokenResponse> GetToken(string scope)
+    ```csharp
+    public async Task<TokenResponse> GetToken(string scope)
+    {
+        using var client = new HttpClient();
+        var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
         {
-            using var client = new HttpClient();
-            var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Address = "https://localhost:44318/connect/token", // you can find all meta data here https://localhost:44318/.well-known/openid-configuration
+            Address = "https://localhost:44318/connect/token", // you can find all meta data here https://localhost:44318/.well-known/openid-configuration
 
-                ClientId = _identityServerSettings.Value.ClientName,
-                ClientSecret = _identityServerSettings.Value.ClientPassword,
-                Scope = scope
-            });
+            ClientId = _identityServerSettings.Value.ClientName,
+            ClientSecret = _identityServerSettings.Value.ClientPassword,
+            Scope = scope
+        });
 
 
-            if (tokenResponse.IsError)
-            {
-                _logger.LogError($"Unable to get token. Error is: {tokenResponse.Error}");
-                throw new Exception("Unable to get token", tokenResponse.Exception);
-            }
-
-            return tokenResponse;
+        if (tokenResponse.IsError)
+        {
+            _logger.LogError($"Unable to get token. Error is: {tokenResponse.Error}");
+            throw new Exception("Unable to get token", tokenResponse.Exception);
         }
-        ```
+
+        return tokenResponse;
+    }
+    ```
 
     so Finally we have code for calling API
     ```csharp

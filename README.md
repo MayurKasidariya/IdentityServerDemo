@@ -34,6 +34,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
     - Microsoft.EntityFrameworkCore.SqlServer //use to connect sql server with identity server
     - Microsoft.EntityFrameworkCore.Tools //use for data manupulation
 3. Add Quickstart UI of Indetity server which you can get from https://github.com/IdentityServer/IdentityServer4.Quickstart.UI, To configure Quickstart UI in project 
+    ### Statup.cs
     - add service in `ConfigureServices` 
         ```csharp
         services.AddControllersWithViews();
@@ -52,23 +53,24 @@ demonstrates how to use that token to fetch a list of weather data that are acce
         ```
 
 4. After installing all the nuget packages now we go for `Startup.cs` file and configure identity server using `services.AddIdentityServer()` in ConfigureService(), also we configure DbContext for ConfigurationStore and OperationalStore.
-    -  ```csharp
-        var connectionString = Configuration.GetConnectionString("DefaultConnection");
-        var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-        services.AddIdentityServer()
-            .AddAspNetIdentity<IdentityUser>() // this adds asp user identity login
-            // this adds the operational data to DB (codes, tokens, consents)
-            .AddConfigurationStore(con =>
-            {
-                con.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-            })
-            // this adds the operational data to DB (codes, tokens, consents)
-            .AddOperationalStore(os =>
-            {
-                os.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));                    
-            })
-            .AddDeveloperSigningCredential();
-        ```
+    ### Statup.cs
+    ```csharp
+    var connectionString = Configuration.GetConnectionString("DefaultConnection");
+    var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+    services.AddIdentityServer()
+        .AddAspNetIdentity<IdentityUser>() // this adds asp user identity login
+        // this adds the operational data to DB (codes, tokens, consents)
+        .AddConfigurationStore(con =>
+        {
+            con.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+        })
+        // this adds the operational data to DB (codes, tokens, consents)
+        .AddOperationalStore(os =>
+        {
+            os.ConfigureDbContext = configDb => configDb.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));                    
+        })
+        .AddDeveloperSigningCredential();
+    ```
     notice the addition of the new call to AddAspNetIdentity<IdentityUser>. AddAspNetIdentity adds the integration layer to allow IdentityServer to access the user data for the ASP.NET Core Identity user database. This is needed when IdentityServer must add claims for the users into tokens.
 5. Now add Migration for DbContext that we have config in the above step, before that please check the Connection string in `appsettings.json` and change as per your Connection string, 
     - now run the command as below in Package Manage Console
@@ -87,7 +89,8 @@ demonstrates how to use that token to fetch a list of weather data that are acce
 7. Add new custom Dbcontext which inherites `IdentityDbContext` which is use to manage login of application using database
     - In code you can get the file `IdsDbContext.cs` in `Data` directory
     - after adding file configure DbContext in services
-        ```csharp Startup.cs
+        ### Statup.cs
+        ```csharp
             services.AddDbContext<IdsDbContext>(options =>
                 options.UseSqlServer(connectionString,
                     sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
@@ -98,7 +101,8 @@ demonstrates how to use that token to fetch a list of weather data that are acce
             PM> update-database -Context IdsDbContext
         ```
     - configure custome DbContext with Identity methods which use two prameters `IdentityUser, IdentityRole` to manage use login
-        ```csharp Startup.cs
+        ### Statup.cs
+        ```csharp
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdsDbContext>();
         ```
@@ -106,6 +110,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
     Note that AddIdentity<ApplicationUser, IdentityRole> must be invoked before AddIdentityServer.
 
 8. Identity server requires data to do the operation so in code there are some hard-coded in-memory clients and resource definitions in `Config.cs` file those data seeded into database using InitializeDatabase() method which is called in `Configure` method in `Startup.cs` file
+    ### Statup.cs
     ```csharp
         private void InitializeDatabase(IApplicationBuilder app)
         {
@@ -229,6 +234,7 @@ demonstrates how to use that token to fetch a list of weather data that are acce
 
 1. Add New project of ASP.NET CORE(.NET 5.0) using any name in code name is `IdsWebApi`, it includes a default controller called `WeatherForecastController`.
 2. to configure API using Identity server we need to install NuGet package `IdentityServer4.AccessTokenValidation` which provide a library to configure API using IdentityServerAuthentication. After installation of the NuGet package we need to add a service in `ConfigureServices` (IdsWebApi/Startup.cs)
+    ### Startup.cs
     ```csharp
         public void ConfigureServices(IServiceCollection services)
         {
@@ -243,10 +249,12 @@ demonstrates how to use that token to fetch a list of weather data that are acce
     ```
 3. Still Api is not secure until we add Authentication in App and add [Authorize] role on the API Controller please check this
     - Add Authentication in App
+        ### Startup.cs
         ```csharp
             app.UseAuthentication();
         ```
     - Add Authorize role
+        ### WeatherForecastController.cs
         ```csharp
             [ApiController]
             [Route("[controller]")]
